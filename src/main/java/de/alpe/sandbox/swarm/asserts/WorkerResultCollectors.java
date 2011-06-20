@@ -1,7 +1,8 @@
-package de.alpe.sandbox.swarm.worker;
+package de.alpe.sandbox.swarm.asserts;
 
 import de.alpe.sandbox.swarm.asserts.AtLeastWorkerResultMatches;
 import de.alpe.sandbox.swarm.asserts.EveryWorkerResultMatches;
+import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
 
 public class WorkerResultCollectors {
 

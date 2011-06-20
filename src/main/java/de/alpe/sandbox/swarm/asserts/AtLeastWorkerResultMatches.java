@@ -1,21 +1,20 @@
 package de.alpe.sandbox.swarm.asserts;
 
-import static java.lang.String.format;
+import de.alpe.sandbox.swarm.worker.Worker;
+import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
+import org.hamcrest.Matcher;
 
 import java.util.Collection;
 
-import org.hamcrest.Matcher;
-
-import de.alpe.sandbox.swarm.worker.Worker;
-import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
+import static java.lang.String.format;
 
 public class AtLeastWorkerResultMatches implements WorkersResultCollector {
 
 	private final int number;
 
-	public AtLeastWorkerResultMatches(int number) {
-		this.number = number;
-	}
+    AtLeastWorkerResultMatches(int number) {
+        this.number = number;
+    }
 
 	@Override
 	public <T> void verify(Collection<Worker> workers, Matcher<T> matcher, String aliasName) {

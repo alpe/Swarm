@@ -2,16 +2,18 @@ package de.alpe.sandbox.swarm.asserts;
 
 import static java.lang.String.format;
 
+import de.alpe.sandbox.swarm.worker.Worker;
+import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.hamcrest.Matcher;
 
-import de.alpe.sandbox.swarm.worker.Worker;
-import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
-
 public class EveryWorkerResultMatches implements WorkersResultCollector {
+
+    EveryWorkerResultMatches(){}
 
 	@Override
 	public <T> void verify(final Collection<Worker> workers, final Matcher<T> matcher, final String aliasName) {

@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import de.alpe.sandbox.swarm.asserts.WorkerResultCollectors;
 import org.junit.Test;
-
-import de.alpe.sandbox.swarm.worker.WorkerResultCollectors;
 
 public class ManyToOneTests {
 

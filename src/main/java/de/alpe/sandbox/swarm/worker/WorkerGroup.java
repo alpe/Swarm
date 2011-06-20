@@ -18,14 +18,15 @@ import de.alpe.sandbox.swarm.asserts.ResultAssertionFactory;
 
 public class WorkerGroup implements WorkloadRecorder {
 
-	private static final String DEFAULT_WORKER_ALIAS = "";
+    private static final String DEFAULT_WORKER_ALIAS = "";
+    private static final long DEFAULT_EXECUTION_TIMEOUT = 10000L;
 
-	private final WorkloadExecutor workloadExecutor;
+    private final WorkloadExecutor workloadExecutor;
 	private final AssertionVerificator assertionVerificator;
 
-	private long executionTimeout = 10000L;
+	private long executionTimeout = DEFAULT_EXECUTION_TIMEOUT;
 
-	public WorkerGroup(final Worker[] workers) {
+	protected WorkerGroup(final Worker[] workers) {
 		workloadExecutor = new WorkloadExecutor(workers);
 		assertionVerificator = new AssertionVerificator();
 	}

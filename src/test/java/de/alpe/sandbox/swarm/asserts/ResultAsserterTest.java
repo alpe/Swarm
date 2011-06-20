@@ -1,54 +1,52 @@
 package de.alpe.sandbox.swarm.asserts;
 
-import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.util.Collection;
+import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import de.alpe.sandbox.swarm.worker.Worker;
-import de.alpe.sandbox.swarm.worker.WorkerGroup;
-import de.alpe.sandbox.swarm.worker.WorkersResultCollector;
-
 public class ResultAsserterTest {
 
 	@Test
+	public void shouldUseResultAssertionFactoryToBuildAssertionObject() throws Exception {
+		// given
+        WorkersResultCollector resultCollector = mock(WorkersResultCollector.class);
+        Matcher<Object> matcher = is(Object.class);
+
+        ResultAssertionFactory resultAsserterFactory = mock(ResultAssertionFactory.class);
+        when(resultAsserterFactory.buildResultAssertion(resultCollector, matcher)).thenReturn(null);
+
+        ResultAsserter<Object> resultAsserter = new ResultAsserter<Object>(null, mock(AssertionVerificator.class), resultAsserterFactory);
+
+        // when
+		resultAsserter.andVerifyThat(resultCollector, matcher);
+		
+		// then
+        verify(resultAsserterFactory).buildResultAssertion(resultCollector, matcher);
+	}
+	@Test
 	public void shouldScheduleResultAssertionWhenVerifyThatCalled() throws Exception {
 		// given
-		WorkerGroup workerGroup = null;
-		Collection<Worker> workersToVerify = emptyList();
-		String aliasName = "aliasName";
-		AssertionVerificator assertionVerificator = mock(AssertionVerificator.class);
-		ResultAsserter<Object> resultAsserter = new ResultAsserter<Object>(workerGroup, assertionVerificator, new ResultAssertionFactory(workersToVerify, aliasName));
-		
-		// when
-		WorkersResultCollector anyResultCollector = null;
-		Matcher<Object> anyMatcher = null;
-		resultAsserter.andVerifyThat(anyResultCollector, anyMatcher);
-		
+        WorkersResultCollector anyResultCollector = mock(WorkersResultCollector.class);
+        Matcher<Object> matcher = is(Object.class);
+
+        ResultAssertion resultAssertion = mock(ResultAssertion.class);
+        ResultAssertionFactory resultAsserterFactory = mock(ResultAssertionFactory.class);
+        when(resultAsserterFactory.buildResultAssertion(anyResultCollector, matcher)).thenReturn(resultAssertion);
+
+        AssertionVerificator assertionVerificator = mock(AssertionVerificator.class);
+        ResultAsserter<Object> resultAsserter = new ResultAsserter<Object>(null, assertionVerificator, resultAsserterFactory);
+
+        // when
+		resultAsserter.andVerifyThat(anyResultCollector, matcher);
+
 		// then
-		verify(assertionVerificator).scheduleResultAssertion((ResultAssertion) notNull());
+		verify(assertionVerificator).scheduleResultAssertion(resultAssertion);
 	}
-	
-	@Test
-	public void shouldXXX() throws Exception {
-		// given
-		WorkerGroup workerGroup = null;
-		Collection<Worker> workersToVerify = emptyList();
-		String aliasName = "aliasName";
-		AssertionVerificator assertionVerificator = mock(AssertionVerificator.class);
-		ResultAsserter<Object> resultAsserter = new ResultAsserter<Object>(workerGroup, assertionVerificator, new ResultAssertionFactory(workersToVerify, aliasName));
-		// when
-		WorkersResultCollector anyResultCollector = null;
-		Matcher<Object> anyMatcher = is(new Object());
-		resultAsserter.andVerifyThat(anyResultCollector, anyMatcher);
-		
-		// then
-		verify(assertionVerificator).scheduleResultAssertion((ResultAssertion) notNull());
-	}
+
 }

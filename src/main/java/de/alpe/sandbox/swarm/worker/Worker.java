@@ -6,11 +6,12 @@ import java.util.concurrent.CountDownLatch;
 public class Worker implements Runnable {
 
 	private final CountDownLatch syncPoint;
-	private Callable<?> workLoad;
-	private Object callResult;
-	private final String name;
+    private final String name;
+    private Callable<?> workLoad;
+    private Object callResult;
+    private Exception workloadExecutionException;
 
-	public Worker(final String name, final CountDownLatch syncPoint) {
+    protected Worker(final String name, final CountDownLatch syncPoint) {
 		this.name = name;
 		this.syncPoint = syncPoint;
 	}
@@ -18,6 +19,10 @@ public class Worker implements Runnable {
 	public void setWorkLoad(final Callable<?> workLoad) {
 		this.workLoad = workLoad;
 	}
+
+    public Exception getWorkloadExecutionException() {
+        return workloadExecutionException;
+    }
 
 	public Object getCallResult() {
 		return callResult;
@@ -34,9 +39,11 @@ public class Worker implements Runnable {
 		try {
 			callResult = this.workLoad.call();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+            this.workloadExecutionException = e;
+            throw new RuntimeException(workloadExecutionException);
 		}
 	}
+
 
 	@Override
 	public String toString() {
