@@ -20,7 +20,7 @@ public class ResultAsserter<T>  {
 		this.assertionVerificator = assertionVerificator;
 	}
 
-	public ResultAsserter<T> andVerifyThat(final WorkersResultCollector resultCollector, final Matcher<T> matcher) {
+	public ResultAsserter<T> andAssertThat(final WorkersResultCollector resultCollector, final Matcher<T> matcher) {
 		assertionVerificator.scheduleResultAssertion(resultAsserterFactory.buildResultAssertion(resultCollector, matcher));
 		return this;
 	}

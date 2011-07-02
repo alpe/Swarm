@@ -19,9 +19,10 @@ import org.junit.Test;
 public class SwarmIntegrationTest {
 
     @Test
-    public void shouldExecuteWorkloadSimultan() throws Exception {
+    public void shouldExecuteWorkloadSimultaneous() throws Exception {
         // given
         ThreadCollector threadCollector = new ThreadCollector();
+
         // when
         swarm(50).workers().toCall(on(threadCollector).doSomething());
 

@@ -1,30 +1,31 @@
-package de.alpe.sandbox.swarm;
+package de.alpe.sandbox.swarm.examples;
 
-import static de.alpe.sandbox.swarm.SwarmProvider.on;
-import static de.alpe.sandbox.swarm.SwarmProvider.swarm;
-import static de.alpe.sandbox.swarm.worker.WorkerSubset.BY_THREE_WORKERS;
-import static de.alpe.sandbox.swarm.worker.WorkerSubset.BY_TWO_WORKERS;
-import static de.alpe.sandbox.swarm.worker.WorkerSubset.onWorkers;
-import static java.lang.String.format;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import de.alpe.sandbox.swarm.asserts.WorkerResultCollectors;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import de.alpe.sandbox.swarm.asserts.WorkerResultCollectors;
-import org.junit.Test;
+import static de.alpe.sandbox.swarm.SwarmProvider.on;
+import static de.alpe.sandbox.swarm.SwarmProvider.swarm;
+import static de.alpe.sandbox.swarm.asserts.WorkerResultCollectors.anyReceivedResult;
+import static de.alpe.sandbox.swarm.asserts.WorkerResultCollectors.atLeast;
+import static de.alpe.sandbox.swarm.asserts.WorkerResultCollectors.everyReceivedResult;
+import static de.alpe.sandbox.swarm.worker.WorkerSubset.BY_THREE_WORKERS;
+import static de.alpe.sandbox.swarm.worker.WorkerSubset.BY_TWO_WORKERS;
+import static de.alpe.sandbox.swarm.worker.WorkerSubset.onWorkers;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ManyToOneTests {
 
-	List<Object> userRepository;
-	
+
 	@Test
 	public void manyClientsOneMethod_callable() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
 		swarm(5).workers().toCall(new Callable<Boolean>() {
@@ -41,7 +42,7 @@ public class ManyToOneTests {
 	@Test
 	public void manyClientsOneMethod_Runnable() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
 		swarm(5).workers().toCall(new Runnable() {
@@ -57,7 +58,7 @@ public class ManyToOneTests {
 	@Test
 	public void manyClientsOneMethod_proxy() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
 		swarm(5).workers().toCall(on(userRepository).add("anyObject"));
@@ -69,22 +70,28 @@ public class ManyToOneTests {
 	@Test
 	public void manyClientsOneMethod_verifyResult_every() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
-		swarm(5).workers().toCall(on(userRepository).add("anyObject")).andVerifyThat(WorkerResultCollectors.everyReceivedResult(), is(equalTo(true)));
+		swarm(5).workers()
+                .toCall(on(userRepository).add("anyObject"))
+                .andAssertThat(everyReceivedResult(),
+                        is(equalTo(true)));
 		
 		// then
 		assertThat(userRepository.size(), is(5));
 	}
+
 	@Test
 	public void manyClientsOneMethod_within() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository  = new ArrayList<Object>();
 		
 		// when
-		swarm(5).workers().toCall(on(userRepository).add("anyObject"))
-			.withTimeout(1000L).andVerifyThat(WorkerResultCollectors.everyReceivedResult(), is(equalTo(true)));
+		swarm(5).workers()
+                .toCall(on(userRepository).add("anyObject"))
+                .withTimeout(1000L)
+                .andAssertThat(everyReceivedResult(), is(equalTo(true)));
 		
 		// then
 		assertThat(userRepository.size(), is(5));
@@ -93,10 +100,12 @@ public class ManyToOneTests {
 	@Test
 	public void manyClientsOneMethod_verifyResult_any() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
-		swarm(5).workers().toCall(on(userRepository).add("anyObject")).andVerifyThat(WorkerResultCollectors.anyReceivedResult(), is(equalTo(true)));
+		swarm(5).workers()
+                .toCall(on(userRepository).add("anyObject"))
+                .andAssertThat(anyReceivedResult(), is(equalTo(true)));
 		
 		// then
 		assertThat(userRepository.size(), is(5));
@@ -105,11 +114,15 @@ public class ManyToOneTests {
 	@Test
 	public void manyClientsOneMethod_differentMethodsCalled() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
-		swarm(5).workers().toCall(on(userRepository).add("anyObject"), BY_TWO_WORKERS) //
-				.workers().toCall(on(userRepository).add("otherObject"), BY_THREE_WORKERS);
+		swarm(5).workers()
+                .toCall(on(userRepository).add("anyObject"),
+                        BY_TWO_WORKERS) //
+				.workers()
+                .toCall(on(userRepository).add("otherObject"),
+                        BY_THREE_WORKERS);
 		
 		// then
 		assertThat(userRepository.size(), is(5));
@@ -121,15 +134,18 @@ public class ManyToOneTests {
 	@Test
 	public void manyClientsOneMethod_differentMethodsCalled_multipleResultAssertions() throws Exception {
 		// given
-		userRepository = new ArrayList<Object>();
+		final List<Object> userRepository = new ArrayList<Object>();
 		
 		// when
-		swarm(5).workers().toCall(on(userRepository).add("anyObject"), onWorkers(2, "alias")) //
-				.andVerifyThat(WorkerResultCollectors.everyReceivedResult(), is(equalTo(true)))//
-				.andVerifyThat(WorkerResultCollectors.anyReceivedResult(), is(equalTo(true)))//
-				.workers().toCall(on(userRepository).add("otherObject"), BY_THREE_WORKERS) //
-				.andVerifyThat(WorkerResultCollectors.everyReceivedResult(), is(equalTo(true)))
-				.andVerifyThat(WorkerResultCollectors.atLeast(2), is(equalTo(true)))
+		swarm(5).workers()
+                .toCall(on(userRepository).add("anyObject"), onWorkers(2, "alias")) //
+				.andAssertThat(everyReceivedResult(), is(equalTo(true)))//
+				.andAssertThat(anyReceivedResult(), is(equalTo(true)))//
+				.workers()
+                .toCall(on(userRepository).add("otherObject"),
+                        BY_THREE_WORKERS) //
+				.andAssertThat(everyReceivedResult(), is(equalTo(true)))
+				.andAssertThat(atLeast(2), is(equalTo(true)))
 				;
 		// then
 		assertThat(userRepository.size(), is(5));
@@ -139,7 +155,6 @@ public class ManyToOneTests {
 	private static int countElements(final List<Object> userRepository, final String source) {
 		int result = 0;
 		for (Object object : userRepository) {
-			System.out.println(format("%s equals %s: %s", object, source, object.equals(source)));
 			if (object.equals(source)) {
 				result++;
 			}

@@ -1,4 +1,4 @@
-package de.alpe.sandbox.swarm;
+package de.alpe.sandbox.swarm.examples;
 
 import static de.alpe.sandbox.swarm.SwarmProvider.swarm;
 import static java.lang.String.format;
@@ -7,9 +7,8 @@ import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.Callable;
 
-import org.junit.Test;
-
 import de.alpe.sandbox.swarm.WorkloadFactory;
+import org.junit.Test;
 
 public class DummyTest {
 
@@ -48,12 +47,12 @@ public class DummyTest {
 		public int setState(final int state) {
 			synchronized (monitor) {
 				this.state = state;
-				hiePassiertDieVerarbeitung();
+				doSomethingInternal();
 				return this.state;
 			}
 		}
 
-		private void hiePassiertDieVerarbeitung() {
+		private void doSomethingInternal() {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {

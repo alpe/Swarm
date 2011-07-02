@@ -24,7 +24,7 @@ public class ResultAsserterTest {
         ResultAsserter<Object> resultAsserter = new ResultAsserter<Object>(null, mock(AssertionVerificator.class), resultAsserterFactory);
 
         // when
-		resultAsserter.andVerifyThat(resultCollector, matcher);
+		resultAsserter.andAssertThat(resultCollector, matcher);
 		
 		// then
         verify(resultAsserterFactory).buildResultAssertion(resultCollector, matcher);
@@ -43,7 +43,7 @@ public class ResultAsserterTest {
         ResultAsserter<Object> resultAsserter = new ResultAsserter<Object>(null, assertionVerificator, resultAsserterFactory);
 
         // when
-		resultAsserter.andVerifyThat(anyResultCollector, matcher);
+		resultAsserter.andAssertThat(anyResultCollector, matcher);
 
 		// then
 		verify(assertionVerificator).scheduleResultAssertion(resultAssertion);
