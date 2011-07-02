@@ -1,7 +1,8 @@
 Swarm
 +++++
 
-Simple test framework concurrent method invocations in Java.
+Simple Java framework to test concurrent behaviour.
+N Threads call 1..N Methods
 
-more:
+Samples and doc:
 https://github.com/alpe/Swarm/wiki/Home/
