@@ -4,6 +4,35 @@
     <groupId>de.alpe.sandbox</groupId>
     <artifactId>swarm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Swarm</name>
+    <description>Simple Java framework to test concurrent behaviour.</description>
+    <url>https://github.com/alpe/Swarm</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+		<developer>
+			<name>Alex Peters</name>
+			<id>alpe1</id>
+			<organization>private</organization>
+			<organizationUrl>https://github.com/alpe</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+    <scm>
+		<url>https://github.com/alpe/Swarm/tree/master</url>
+		<connection>scm:git:git://github.com/alpe/Swarm.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:alpe/Swarm.git</developerConnection>
+	</scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
